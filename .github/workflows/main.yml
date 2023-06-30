@@ -17,7 +17,7 @@ jobs:
       uses: pressidium/lftp-mirror-action@v1
       with:
         # SFTP credentials
-        host: ${{ secrets.FPT_HOST }}
+        host: ${{ secrets.FTP_HOST }}
         port: ${{ secrets.FTP_PORT }}
         user: ${{ secrets.FTP_USERNAME }}
         pass: ${{ secrets.FTP_PASSWORD }}
