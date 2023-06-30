@@ -83,11 +83,12 @@ module.exports = {
       if(i.customId === "accept") {
 
 
-        const password = generatePassword(6);
+        const generatedPassword = await generatePassword(6);
+
         dbUser = await User.create({
           user_id: interaction.user.id,
           username: interaction.user.username,
-          password: password,
+          password: generatedPassword,
           accepted: true
         });
         let successEmbed = new EmbedBuilder()
@@ -122,7 +123,7 @@ module.exports = {
           .addFields(
             {
               name: `${emojis.key} Mot de passe`,
-              value: `\`${password}\``,
+              value: `\`${generatedPassword}\``,
               inline: true,
             }
           );
@@ -130,8 +131,6 @@ module.exports = {
         let mpMsg = await interaction.user.send({
           embeds: [userEmbed],
         });
-        let pinMsg = await mpMsg.pin();
-        await pinMsg.delete();
 
       } else if(i.customId === "decline") {
         let declineEmbed = new EmbedBuilder()
