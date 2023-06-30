@@ -9,10 +9,32 @@ module.exports = {
    * @param {BaseInteraction} interaction
    */
   execute: async (client, interaction) => {
+
+    let Infos = await getModel("Infos");
+    let maintenance = await Infos.findOne({
+      where: {
+        name: "maintenance"
+      }
+    });
+
+    if(!maintenance) {
+      maintenance = await Infos.create({
+        name: "maintenance",
+        value: false
+      });
+    }
+
+    
     if (interaction.isChatInputCommand()) {
       const command = client.commands.get(interaction.commandName);
       if (!command) return;
-
+      if(maintenance.value && command.data.name != "maintenance"){
+        return interaction.reply({
+          content: "❌ La banque est actuellement en maintenance !",
+          ephemeral: true
+        });
+      }
+      
       client.log.exec(
         `${command.data.name} exécutée par ${interaction.user.tag} sur ${
           interaction.guild ? interaction.guild.name : "DM"

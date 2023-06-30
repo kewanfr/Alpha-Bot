@@ -28,12 +28,28 @@ module.exports = {
   run: async (client, interaction) => {
     const emojis = client.config.emojis;
     const Wallet = await getModel("Wallet");
+    const User = await getModel("User");
     let user = interaction.options.getUser("user") || interaction.user;
     let wallet = await Wallet.findOne({
       where: {
         user_id: user.id
       }
     });
+
+    let dbUser = await User.findOne({ where: { user_id: user.id } });
+    if (!dbUser) {
+      let embed = new EmbedBuilder()
+        .setTitle(`${emojis.bank} Profil de ${user.username}`)
+        .setDescription(`${emojis.oui} L'utilisateur \`${user.username}\` n'a pas de compte en banque !`)
+        .setColor("Red")
+        .setTimestamp();
+
+      return interaction.reply({
+        embeds: [embed],
+        ephemeral: true
+      });
+    }
+
     if (!wallet) {
       
       let embed = new EmbedBuilder()
@@ -42,25 +58,28 @@ module.exports = {
         .setColor("Red")
         .setTimestamp();
 
-      interaction.reply({
-        embeds: [embed],
-        ephemeral: true
-      });
-      
-    } else {
-
-      let embed = new EmbedBuilder()
-        .setTitle(`${emojis.bank} Profil de ${user.username}`)
-        .setDescription(`${emojis.oui} L'utilisateur \`${user.username}\` a **${wallet.money}** ${emojis.kcoins} **Koins** dans son porte monnaie !`)
-        .setColor("Green")
-        .setTimestamp();
-
-      interaction.reply({
+      return interaction.reply({
         embeds: [embed],
         ephemeral: true
       });
       
     }
+
+    let embed = new EmbedBuilder()
+      .setTitle(`${emojis.bank} Profil de ${user.username}`)
+      .setDescription(`${emojis.oui} L'utilisateur \`${user.username}\` a **${wallet.money}** ${emojis.kcoins} **Koins** dans son porte monnaie !\n`
+      + `Il a **${dbUser.bank}** ${emojis.kcoins} **Koins** sur son compte !\n` +
+      `Il a **${wallet.money + dbUser.bank}** ${emojis.kcoins} **Koins** en tout !` +
+      `\n\n__Description__: ${dbUser.description ?? "L'utilisateur n'a pas de description"}` 
+      )
+      .setColor("Green")
+      .setTimestamp();
+
+    interaction.reply({
+      embeds: [embed],
+      ephemeral: true
+    });
+      
     
   },
 };

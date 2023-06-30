@@ -22,18 +22,14 @@ module.exports = (client) => {
         type: DataTypes.BOOLEAN,
         allowNull: true,
       },
-      connected: {
-        type: DataTypes.BOOLEAN,
-        allowNull: true,
-      },
-      connected_at: {
-        type: DataTypes.DATE,
-        allowNull: true,
-      },
       bank: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
       },
+      description: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      }
     },
     {
       // Les options de votre modèle

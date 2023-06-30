@@ -3,6 +3,7 @@ const {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
+  PermissionsBitField,
 } = require("discord.js");
 
 module.exports = {
@@ -16,7 +17,8 @@ module.exports = {
         type: "USER",
         required: true,
       }
-    ]
+    ],
+    defaultMemberPermission: PermissionsBitField.Flags.Administrator
   },
   guildOnly: true,
   disabled: false,
@@ -29,6 +31,7 @@ module.exports = {
     const emojis = client.config.emojis;
     const Bans = await getModel("Bans");
 
+    let user = interaction.options.getUser("user");
     let banned = await Bans.findOne({
       where: {
         user_id: user.id
@@ -47,7 +50,6 @@ module.exports = {
         ephemeral: true
       });
     }
-    let user = interaction.options.getUser("user");
     
     await Bans.destroy({
       where: {

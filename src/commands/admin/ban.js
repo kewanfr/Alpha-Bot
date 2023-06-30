@@ -3,6 +3,7 @@ const {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
+  PermissionsBitField
 } = require("discord.js");
 
 module.exports = {
@@ -16,7 +17,8 @@ module.exports = {
         type: "USER",
         required: true,
       }
-    ]
+    ],
+    defaultMemberPermission: PermissionsBitField.Flags.Administrator
   },
   guildOnly: true,
   disabled: false,
