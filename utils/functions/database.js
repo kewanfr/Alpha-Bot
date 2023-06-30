@@ -13,6 +13,8 @@ module.exports = async (client) => {
         return Wallet;
       case "Infos":
         return Infos;
+      case "Bans":
+        return Bans;
       default:
         return false;
     }
@@ -70,6 +72,15 @@ module.exports = async (client) => {
     return getDiscordTimestamp(reglement.updatedAt);
   }
 
+  isUserBan = async(user_id) => {
+    let ban = await Bans.findOne({
+      where: {
+        user_id: user_id,
+      }
+    });
+    return ban ? true : false;
+  };
+
   client.sqlite = new Sequelize({
     dialect: "sqlite",
     storage: "./data/db.sqlite",
@@ -80,6 +91,7 @@ module.exports = async (client) => {
   const User = require("../models/User")(client);
   const Infos = require("../models/Infos")(client);
   const Wallet = require("../models/Wallet")(client);
+  const Bans = require("../models/Bans")(client);
 
   await client.sqlite.sync({ alter: true });
   await verifUpdateReglement();

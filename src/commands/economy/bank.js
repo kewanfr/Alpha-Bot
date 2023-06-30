@@ -17,6 +17,23 @@ module.exports = {
     const emojis = client.config.emojis;
     const User = await getModel("User");
 
+    if (await isUserBanned(interaction.user.id)) {
+      let embed = new EmbedBuilder()
+        .setTitle(`${emojis.bank} Utilisateur banni !`)
+        .setDescription(
+          `${emojis.non} Tu as été banni de la banque !\n\n` +
+            `${emojis.arrow} Tu ne peux plus utiliser les commandes de la banque !\n` +
+            `${emojis.arrow} Tu peux contacter le staff pour plus d'informations !`
+        )
+        .setColor("Red")
+        .setTimestamp();
+      
+      return interaction.reply({
+        embeds: [embed],
+        ephemeral: true,
+      });
+    }
+
     let dbUser = await User.findOne({
       where: {
         user_id: interaction.user.id,
