@@ -43,14 +43,9 @@ module.exports = {
       .setDescription(
         `Bienvenue \`${interaction.user.username}\` dans la \`Kolaxx Bank\` !\n\n` + 
         `Afin de continuer, tu dois accepter le règlement de la **Kolaxx Bank**: \n` +
-        `${emojis.arrow} **Dernière mise à jour du règlement**: **${await getDiscordDate(new Date())}**\n\n` +
+        `${emojis.arrow} **Dernière mise à jour du règlement**: **${await getLastReglementUpdate()}**\n\n` +
         `__Règlement:__\n` +
-        `${emojis.arrow} La triche est **interdite**\n` +
-        `${emojis.arrow} Il est interdit de faire des **paris**\n` +
-        `${emojis.arrow} Il est interdit d'utiliser un **double compte** pour obtenir des ${emojis.kcoins} **koins**\n` +
-        `${emojis.arrow} Vous ne pouvez pas **supprimer votre compte** ni **changer de mot de passe**\n` +
-        `${emojis.arrow} Tout manquement à une de ces règles serra passible d'un **banissement**\n` +
-        `${emojis.arrow} En cas de problème, contactez un __membre du staff__\n\n`
+        `${await getReglement()}\n\n`
       );
 
     let row = new ActionRowBuilder()
@@ -81,8 +76,6 @@ module.exports = {
 
     collector.on("collect", async (i) => {
       if(i.customId === "accept") {
-
-
         const generatedPassword = await generatePassword(6);
 
         dbUser = await User.create({
@@ -117,7 +110,7 @@ module.exports = {
           .setTimestamp()
           .setColor("Green")
           .setDescription(
-            `✅ \`${interaction.user.username}\` ton compte à la **Kolaxx Bank** a bien été créé !\n` +
+            `${emojis.oui} \`${interaction.user.username}\` ton compte à la **Kolaxx Bank** a bien été créé !\n` +
             `${emojis.arrow} Tu peux te connecter avec la commande ${await getSlashCommandMention("connect")} !`
           )
           .addFields(
@@ -131,6 +124,7 @@ module.exports = {
         let mpMsg = await interaction.user.send({
           embeds: [userEmbed],
         });
+        await mpMsg.pin();
 
       } else if(i.customId === "decline") {
         let declineEmbed = new EmbedBuilder()
@@ -138,7 +132,7 @@ module.exports = {
           .setTimestamp()
           .setColor("Red")
           .setDescription(
-            `❌ \`${interaction.user.username}\` tu as refusé le règlement de la **Kolaxx Bank** !\n\n` +
+            `${emojis.non} \`${interaction.user.username}\` tu as refusé le règlement de la **Kolaxx Bank** !\n\n` +
             `> Tu peux réessayer avec la commande ${await getSlashCommandMention("creer-compte")} !`
           );
         
