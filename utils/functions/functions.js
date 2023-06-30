@@ -52,5 +52,27 @@ module.exports = async (client) => {
         `${emojis.arrow} Utilise ${await getSlashCommandMention("retrait")} pour retirer des koins de ton compte vers ton porte-monnaie !\n` +
         `${emojis.arrow} Utilise ${await getSlashCommandMention("pay")} pour transférer des koins à un autre utilisateur !\n` 
       );
-  }
+  },
+
+  getWalletEmbed = async (userWallet) => {
+    return new EmbedBuilder()
+      .setTitle(`${emojis.bank} Kolaxx Bank`)
+      .setDescription(
+        `${emojis.arrow} **Solde de ton porte monnaie:** **${userWallet.dataValues ? userWallet.dataValues.money : userWallet.money}** ${emojis.koins} **Koins**\n\n` +
+          `${emojis.arrow} Utilise ${await getSlashCommandMention(
+            "bank"
+          )} pour voir le solde de ton compte bancaire !\n` +
+          `${emojis.arrow} Utilise ${await getSlashCommandMention(
+            "depot"
+          )} pour déposer de l'argent sur ton compte bancaire !\n` +
+          `${emojis.arrow} Utilise ${await getSlashCommandMention(
+            "retrait"
+          )} pour retirer de l'argent de ton compte bancaire !\n` +
+          `${emojis.arrow} Utilise ${await getSlashCommandMention(
+            "pay"
+          )} pour transférer de l'argent à un autre utilisateur !\n`
+      )
+      .setTimestamp()
+      .setColor("Blue");
+  };
 }

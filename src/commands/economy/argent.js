@@ -38,7 +38,7 @@ module.exports = {
       });
     }
 
-    let userWallet = await Wallet.findOrCreate({
+    var userWallet = await Wallet.findOrCreate({
       where: {
         user_id: interaction.user.id,
       },
@@ -48,32 +48,18 @@ module.exports = {
       },
     });
 
-    const getWalletEmbed = async (userWallet) => {
-      return new EmbedBuilder()
-        .setTitle(`${emojis.bank} Kolaxx Bank`)
-        .setDescription(
-          `${emojis.arrow} **Solde de ton porte monnaie:** **${userWallet[0].dataValues.money}** ${emojis.koins} **Koins**\n\n` +
-            `${emojis.arrow} Utilise ${await getSlashCommandMention(
-              "bank"
-            )} pour voir le solde de ton compte bancaire !\n` +
-            `${emojis.arrow} Utilise ${await getSlashCommandMention(
-              "depot"
-            )} pour déposer de l'argent sur ton compte bancaire !\n` +
-            `${emojis.arrow} Utilise ${await getSlashCommandMention(
-              "retrait"
-            )} pour retirer de l'argent de ton compte bancaire !\n` +
-            `${emojis.arrow} Utilise ${await getSlashCommandMention(
-              "pay"
-            )} pour transférer de l'argent à un autre utilisateur !\n`
-        )
-        .setTimestamp()
-        .setColor("Blue");
-    };
+    let refreshButton = new ButtonBuilder()
+      .setCustomId("refresh-wallet")
+      .setLabel("Mettre à jour")
+      .setStyle(ButtonStyle.Primary);
+    let refreshRow = new ActionRowBuilder().addComponents(refreshButton);
 
-    let WalletEmbed = await getWalletEmbed(userWallet);
+    let walletEmbed = await getWalletEmbed(userWallet[0]);
+
 
     let msg = await interaction.reply({
-      embeds: [WalletEmbed],
+      embeds: [walletEmbed],
+      components: [refreshRow],
       ephemeral: true,
     });
     

@@ -44,6 +44,12 @@ module.exports = {
       },
     });
 
+    let refreshButton = new ButtonBuilder()
+      .setCustomId("refresh-bank")
+      .setLabel("Mettre à jour")
+      .setStyle(ButtonStyle.Primary);
+    let refreshRow = new ActionRowBuilder().addComponents(refreshButton);
+
     let createAccount = async (interaction) => {
       return new Promise(async (resolve, reject) => {
         let acceptEmbed = new EmbedBuilder()
@@ -65,12 +71,12 @@ module.exports = {
             .setCustomId("accept")
             .setLabel("Accepter")
             .setStyle(ButtonStyle.Success)
-            .setEmoji(emojis.accept),
+            .setEmoji(emojis.oui),
           new ButtonBuilder()
             .setCustomId("decline")
             .setLabel("Refuser")
             .setStyle(ButtonStyle.Danger)
-            .setEmoji(emojis.decline)
+            .setEmoji(emojis.non)
         );
 
         let acceptMsg = await interaction.reply({
@@ -114,9 +120,10 @@ module.exports = {
             let dashboardEmbed = await getDashboardEmbed(dbUser);
             await i.editReply({
               embeds: [successEmbed, dashboardEmbed, bankEmbed],
-              components: [],
+              components: [refreshRow],
               ephemeral: true,
             });
+
             resolve(true);
           } else if (i.customId === "decline") {
             let declineEmbed = new EmbedBuilder()
@@ -125,9 +132,9 @@ module.exports = {
               .setColor("Red")
               .setDescription(
                 `${emojis.non} \`${interaction.user.username}\` tu as refusé le règlement de la **Kolaxx Bank** !\n\n` +
-                  `> Tu peux réessayer avec la commande ${await getSlashCommandMention(
-                    "create-account"
-                  )} !`
+                `> Tu peux réessayer avec la commande ${await getSlashCommandMention(
+                  "bank"
+                )} !`
               );
 
             if (!i.deferred && !i.replied) await i.deferUpdate();
@@ -148,14 +155,8 @@ module.exports = {
     let bankEmbed = await getBankEmbed(dbUser);
     let dashboardEmbed = await getDashboardEmbed(dbUser);
 
-    let refreshButton = new ButtonBuilder()
-      .setCustomId("refresh-bank")
-      .setLabel("Mettre à jour")
-      .setStyle(ButtonStyle.Primary);
-
     var msg;
 
-    let refreshRow = new ActionRowBuilder().addComponents(refreshButton);
 
     if (!dbUser.accepted) {
       let rulesUpdatedEmbed = new EmbedBuilder()
@@ -236,42 +237,5 @@ module.exports = {
         ephemeral: true,
       });
     }
-
-    let collector = interaction.channel.createMessageComponentCollector({
-      filter: (i) => i.user.id === interaction.user.id,
-      // time: 120000,
-    });
-
-    collector.on("collect", async (i) => {
-      if (i.customId == "refresh-bank") {
-        if (!i.deferred && !i.replied) await i.deferUpdate();
-        dbUser = await User.findOne({
-          where: {
-            user_id: interaction.user.id,
-          },
-        });
-        bankEmbed = await getBankEmbed(dbUser);
-        dashboardEmbed = await getDashboardEmbed(dbUser);
-        await i.editReply({
-          embeds: [dashboardEmbed, bankEmbed],
-          components: [refreshRow],
-          ephemeral: true,
-        });
-      }
-    });
-
-    collector.on("end", async (i) => {
-      if (i.size == 0) {
-        await interaction.editReply({
-          embeds: [dashboardEmbed, bankEmbed],
-          components: [],
-          ephemeral: true,
-        });
-      }
-    });
-
-    // epingler le msg mp et suppr le msg
-
-    //bank: raffiche le règlement s'il a changé
   },
 };
