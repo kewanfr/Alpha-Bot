@@ -1,4 +1,7 @@
+const { EmbedBuilder } = require("discord.js");
+
 module.exports = async (client) => {
+  const emojis = client.config.emojis;
 
   capitalize = (str) => {
     return str.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
@@ -26,5 +29,28 @@ module.exports = async (client) => {
   getSlashCommandMention = (commandName) => {
     if(!client.config.slashCommands[commandName]) return `/${commandName}`;
     return `</${commandName}:${client.config.slashCommands[commandName]}>`;
+  }
+
+  getBankEmbed = async (dbUser) => {
+    return new EmbedBuilder()
+    .setTitle(`${emojis.bank} Kolaxx Bank`)
+    .setDescription(`Voici le solde de ton compte !\n\n${emojis.kcoins} **${dbUser.bank} Koins**`)
+    .setTimestamp()
+    .setColor("Blurple");
+  }
+
+  getDashboardEmbed = async (dbUser) => {
+    return new EmbedBuilder()
+      .setTitle(`${emojis.bank} Compte`)
+      .setTimestamp()
+      .setColor("Blurple")
+      .setDescription(
+        `Bienvenue \`${dbUser.username}\` dans ton compte !\n\n` +
+        `${emojis.arrow} Utilise ${await getSlashCommandMention("bank")} pour connaitre le solde de ton compte !\n` +
+        `${emojis.arrow} Utilise ${await getSlashCommandMention("argent")} pour connaitre le solde de ton porte-monnaie !\n\n` +
+        `${emojis.arrow} Utilise ${await getSlashCommandMention("depot")} pour déposer des ${emojis.kcoins} **Koins** dans ton compte depuis ton porte-monnaie !\n` +
+        `${emojis.arrow} Utilise ${await getSlashCommandMention("retrait")} pour retirer des koins de ton compte vers ton porte-monnaie !\n` +
+        `${emojis.arrow} Utilise ${await getSlashCommandMention("pay")} pour transférer des koins à un autre utilisateur !\n` 
+      );
   }
 }

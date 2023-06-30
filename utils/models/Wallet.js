@@ -1,8 +1,8 @@
 const { Model, DataTypes } = require("sequelize");
 
 module.exports = (client) => {
-  class User extends Model {}
-  User.init(
+  class Wallet extends Model {}
+  Wallet.init(
     {
       id: {
         type: DataTypes.INTEGER,
@@ -14,35 +14,23 @@ module.exports = (client) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      password: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      accepted: {
-        type: DataTypes.BOOLEAN,
-        allowNull: true,
-      },
-      connected: {
-        type: DataTypes.BOOLEAN,
-        allowNull: true,
-      },
-      connected_at: {
-        type: DataTypes.DATE,
-        allowNull: true,
-      },
-      bank: {
+      money: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
       },
+      last_daily: {
+        type: DataTypes.DATE,
+        defaultValue: null,
+      }
     },
     {
       // Les options de votre modèle
       sequelize: client.sqlite,
-      modelName: "User",
-      tableName: "users",
+      modelName: "Wallet",
+      tableName: "wallets",
       timestamps: false,
     }
   );
 
-  return User;
+  return Wallet;
 };

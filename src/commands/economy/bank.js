@@ -3,16 +3,8 @@ const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("
 module.exports = {
   data:
   {
-    name: "connect",
-    description: "Se connecter à son compte bancaire",
-    options: [
-      {
-        name: "mot-de-passe",
-        description: "Le mot de passe de ton compte bancaire",
-        type: "STRING",
-        required: true,
-      }
-    ]
+    name: "bank",
+    description: "Voir le solde de ton compte"
   },
   guildOnly: true,
   disabled: false,
@@ -23,8 +15,6 @@ module.exports = {
    */
   run: async (client, interaction) => {
     const emojis = client.config.emojis;
-    const password = interaction.options.getString("mot-de-passe");
-
     const User = await getModel("User");
 
     let dbUser = await User.findOne({
@@ -36,7 +26,7 @@ module.exports = {
     if(!dbUser) {
       let alreadyEmbed = new EmbedBuilder()
         .setTitle(`${emojis.bank} Kolaxx Bank`)
-        .setDescription(`${emojis.warning} Tu ne possèdes pas encore de compte sur le serveur !\nUtilise ${await getSlashCommandMention("creer-compte")} pour te connecter !`)
+        .setDescription(`${emojis.warning} Tu ne possèdes pas encore de compte sur le serveur !\nUtilise ${await getSlashCommandMention("create-account")} pour te créer un compte !`)
         .setTimestamp()
         .setColor("Orange");
       return interaction.reply({
@@ -45,59 +35,20 @@ module.exports = {
       })
     }
 
-    if(dbUser.connected){
-      let alreadyConnectedEmbed = new EmbedBuilder()
-        .setTitle(`${emojis.bank} Kolaxx Bank`)
-        .setDescription(`${emojis.warning} Tu es déjà connecté à ton compte !`)
-        .setTimestamp()
-        .setColor("Orange");
-      return interaction.reply({
-        embeds: [alreadyConnectedEmbed],
-        ephemeral: true,
-      })
-    }
+    let bankEmbed = await getBankEmbed(dbUser);
+    let dashboardEmbed = await getDashboardEmbed(dbUser);
 
-    if(dbUser.password !== password) {
-      let wrongPasswordEmbed = new EmbedBuilder()
-        .setTitle(`${emojis.bank} Kolaxx Bank`)
-        .setDescription(`${emojis.warning} Le mot de passe que tu as entré est incorrect !`)
-        .setTimestamp()
-        .setColor("Red");
-      return interaction.reply({
-        embeds: [wrongPasswordEmbed],
-        ephemeral: true,
-      })
-    }
+    let refreshButton = new ButtonBuilder()
+    .setCustomId("refresh-bank")
+    .setLabel("Mettre à jour")
+    .setStyle(ButtonStyle.Primary);
 
-    const getDashboard = async () => {
-      
-      let dashboardEmbed = new EmbedBuilder()
-        .setTitle(`${emojis.bank} Tableau de bord`)
-        .setTimestamp()
-        .setColor("Blurple")
-        .setDescription(
-          `Bienvenue \`${interaction.user.username}\` dans le tableau de bord !\n\n` +
-          `${emojis.warning} Tu seras automatiquement déconnecté dans 10 minutes !\n\n` +
-          `${emojis.arrow} Utilise ${await getSlashCommandMention("disconnect")} pour te déconnecter manuellement !\n` +
-          `${emojis.arrow} Utilise ${await getSlashCommandMention("bank")} pour connaitre le solde de ton compte !\n` +
-          `${emojis.arrow} Utilise ${await getSlashCommandMention("argent")} pour connaitre le solde de ton porte-monnaie !\n` +
-          `${emojis.arrow} Utilise ${await getSlashCommandMention("depot")} pour déposer des koins dans ton compte depuis ton porte-monnaire !\n` +
-          `${emojis.arrow} Utilise ${await getSlashCommandMention("retrait")} pour retirer des koins de ton compte vers ton porte-monnaie !\n` +
-          `${emojis.arrow} Utilise ${await getSlashCommandMention("transfert")} pour transférer des koins à un autre utilisateur !\n` 
-        );
+    var msg;
 
-      
-      await dbUser.update({
-        connected: true,
-        connected_at: new Date(),
-      });
-
-      return {
-        embeds: [dashboardEmbed],
-        components: [],
-        ephemeral: true,
-      };
-    }
+    let refreshRow = new ActionRowBuilder()
+      .addComponents(
+        refreshButton
+      );
 
     if(!dbUser.accepted){
       let rulesUpdatedEmbed = new EmbedBuilder()
@@ -131,6 +82,7 @@ module.exports = {
         components: [row],
         ephemeral: true,
       });
+      msgId = askRulesUpdate.id;
       let filter = (i) => i.user.id === interaction.user.id;
       let collector = askRulesUpdate.createMessageComponentCollector({
         filter,
@@ -145,7 +97,11 @@ module.exports = {
           });
           
           await i.deferUpdate();
-          await i.editReply(await getDashboard());
+          await i.editReply({
+            embeds: [dashboardEmbed, bankEmbed],
+            components: [refreshRow],
+            ephemeral: true,
+          });
   
         } else if(i.customId === "refuser-reglement") {
           let declineEmbed = new EmbedBuilder()
@@ -154,7 +110,7 @@ module.exports = {
             .setColor("Red")
             .setDescription(
               `${emojis.non} \`${interaction.user.username}\` tu as refusé le règlement de la **Kolaxx Bank** !\n\n` +
-              `> Tu peux réessayer avec la commande ${await getSlashCommandMention("connect")} !`
+              `> Tu peux réessayer avec la commande ${await getSlashCommandMention("bank")} !`
             );
           
           await i.deferUpdate();
@@ -167,8 +123,46 @@ module.exports = {
       });
 
     }else {
-      await interaction.reply(await getDashboard());
+      let bankMsg = await interaction.reply({
+        embeds: [dashboardEmbed, bankEmbed],
+        components: [refreshRow],
+        ephemeral: true,
+      });
     }
+
+    let collector = interaction.channel.createMessageComponentCollector({
+      filter: (i) => i.user.id === interaction.user.id,
+      // time: 120000,
+    });
+
+    collector.on("collect", async (i) => {
+      if(i.customId == "refresh-bank") {
+        await i.deferUpdate();
+        dbUser = await User.findOne({
+          where: {
+            user_id: interaction.user.id,
+          }
+        });
+        bankEmbed = await getBankEmbed(dbUser);
+        dashboardEmbed = await getDashboardEmbed(dbUser);
+        await i.editReply({
+          embeds: [dashboardEmbed, bankEmbed],
+          components: [refreshRow],
+          ephemeral: true,
+        });
+      }
+    });
+
+    collector.on("end", async (i) => {
+      if(i.size == 0) {
+        await interaction.editReply({
+          embeds: [dashboardEmbed, bankEmbed],
+          components: [],
+          ephemeral: true,
+        });
+      }
+    });
+      
     
     // epingler le msg mp et suppr le msg
 

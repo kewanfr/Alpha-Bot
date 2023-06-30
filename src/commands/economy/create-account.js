@@ -3,7 +3,7 @@ const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("
 module.exports = {
   data:
   {
-    name: "creer-compte",
+    name: "create-account",
     description: "Créer un compte bancaire"
   },
   guildOnly: true,
@@ -27,7 +27,7 @@ module.exports = {
     if(dbUser) {
       let alreadyEmbed = new EmbedBuilder()
         .setTitle(`${emojis.bank} Kolaxx Bank`)
-        .setDescription(`${emojis.warning} Tu possèdes déjà un compte sur le serveur !\nUtilise ${await getSlashCommandMention("connect")} pour te connecter !`)
+        .setDescription(`${emojis.warning} Tu possèdes déjà un compte sur le serveur !\nUtilise ${await getSlashCommandMention("bank")} pour voir ton compte !`)
         .setTimestamp()
         .setColor("Orange");
       return interaction.reply({
@@ -89,9 +89,8 @@ module.exports = {
           .setTimestamp()
           .setColor("Green")
           .setDescription(
-            `Félicitations \`${interaction.user.username}\` !\n\n` +
-            `Bienvenue dans la **Kolaxx Bank** !\n\n` +
-            `Tu as reçu tes identifiants par message privé !`
+            `${emojis.oui} Félicitations \`${interaction.user.username}\`, ton compte à la **Kolaxx Bank** a bien été créé !\n\n` +
+            `${emojis.arrow} Tu peux voir ton compte avec la commande ${await getSlashCommandMention("bank")} !\n\n`
           );
 
         await dbUser.update({
@@ -105,27 +104,6 @@ module.exports = {
           ephemeral: true,
         });
 
-        let userEmbed = new EmbedBuilder()
-          .setTitle(`${emojis.bank} Kolaxx Bank`)
-          .setTimestamp()
-          .setColor("Green")
-          .setDescription(
-            `${emojis.oui} \`${interaction.user.username}\` ton compte à la **Kolaxx Bank** a bien été créé !\n` +
-            `${emojis.arrow} Tu peux te connecter avec la commande ${await getSlashCommandMention("connect")} !`
-          )
-          .addFields(
-            {
-              name: `${emojis.key} Mot de passe`,
-              value: `\`${generatedPassword}\``,
-              inline: true,
-            }
-          );
-
-        let mpMsg = await interaction.user.send({
-          embeds: [userEmbed],
-        });
-        await mpMsg.pin();
-
       } else if(i.customId === "decline") {
         let declineEmbed = new EmbedBuilder()
           .setTitle(`${emojis.bank} Kolaxx Bank`)
@@ -133,7 +111,7 @@ module.exports = {
           .setColor("Red")
           .setDescription(
             `${emojis.non} \`${interaction.user.username}\` tu as refusé le règlement de la **Kolaxx Bank** !\n\n` +
-            `> Tu peux réessayer avec la commande ${await getSlashCommandMention("creer-compte")} !`
+            `> Tu peux réessayer avec la commande ${await getSlashCommandMention("create-account")} !`
           );
         
         await i.deferUpdate();

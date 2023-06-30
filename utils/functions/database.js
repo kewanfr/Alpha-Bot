@@ -9,10 +9,8 @@ module.exports = async (client) => {
     switch(modelName) {
       case "User":
         return User;
-      case "Counter":
-        return Counter;
-      case "DayCounter":
-        return DayCounter;
+      case "Wallet":
+        return Wallet;
       case "Infos":
         return Infos;
       default:
@@ -78,9 +76,10 @@ module.exports = async (client) => {
     logging: false,
     sync: { alter: true }
   });
-
+  
   const User = require("../models/User")(client);
   const Infos = require("../models/Infos")(client);
+  const Wallet = require("../models/Wallet")(client);
 
   await client.sqlite.sync({ alter: true });
   await verifUpdateReglement();
