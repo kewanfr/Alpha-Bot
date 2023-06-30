@@ -12,7 +12,10 @@ var config = {
     developers: ["355402435893919754", "1037059993729499138"],
   },
   
-  channels: {},
+  channels: {
+    createChannel: "1124390827792273509",
+    categoryCreateChannel: "1124390801535946913"
+  },
   emojis: {
     bank: "<:Bank:1124300544429805690>",
     arrow: "➜",
