@@ -3,7 +3,6 @@ module.exports = {
   {
     name: "ping",
     description: "Renvoie la latence du bot",
-    defaultPermission: "Administrator",
   },
   guildOnly: false,
   disabled: false,
