@@ -19,11 +19,12 @@ module.exports = async (client) => {
     return result;
   }
 
-  getDiscordDate = (date) => {
-    return date.toLocaleDateString();
+  getDiscordTimestamp = (timestamp, format = "D") => {
+    return `<t:${Math.floor(timestamp / 1000)}:${format}>`;
   }
 
   getSlashCommandMention = (commandName) => {
-    return `/${commandName}`;
+    if(!client.config.slashCommands[commandName]) return `/${commandName}`;
+    return `</${commandName}:${client.config.slashCommands[commandName]}>`;
   }
 }

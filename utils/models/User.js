@@ -30,6 +30,14 @@ module.exports = (client) => {
         type: DataTypes.DATE,
         allowNull: true,
       },
+      argent: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
+      bank: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
     },
     {
       // Les options de votre modèle

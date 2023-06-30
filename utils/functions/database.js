@@ -20,6 +20,58 @@ module.exports = async (client) => {
     }
   };
 
+  verifUpdateReglement = async() => {
+    let reglement = await Infos.findOne({
+      where: {
+        name: "reglement",
+      }
+    });
+
+    if(!reglement) {
+      reglement = await Infos.create({
+        name: "reglement",
+        value: client.config.reglement,
+      });
+    }
+    
+    if(reglement.value !== client.config.reglement) {
+      reglement.value = client.config.reglement;
+      await reglement.save();
+      let users = await User.findAll({
+        where: {
+          accepted: true,
+        }
+      });
+  
+      for(let user of users) {
+        user.accepted = false;
+        await user.save();
+      }
+    }
+
+  };
+
+
+  getReglement = async() => {
+    let reglement = await Infos.findOne({
+      where: {
+        name: "reglement",
+      }
+    });
+
+    return reglement.value;
+  };
+
+  getLastReglementUpdate = async() => {
+    let reglement = await Infos.findOne({
+      where: {
+        name: "reglement",
+      }
+    });
+
+    return getDiscordTimestamp(reglement.updatedAt);
+  }
+
   client.sqlite = new Sequelize({
     dialect: "sqlite",
     storage: "./data/db.sqlite",
@@ -27,8 +79,9 @@ module.exports = async (client) => {
     sync: { alter: true }
   });
 
-  
   const User = require("../models/User")(client);
-  
+  const Infos = require("../models/Infos")(client);
+
   await client.sqlite.sync({ alter: true });
+  await verifUpdateReglement();
 }
