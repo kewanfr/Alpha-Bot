@@ -13,6 +13,7 @@ module.exports = {
     // quand user rejoint un certain salon vocal, créer un salon vocal avec le nom de l'user
 
     client.on(Events.VoiceStateUpdate, async (oldMember, newMember) => {
+      
       if (newMember.member.user.bot) return;
       if(oldMember.channelId == newMember.channelId) return;
       if (newMember.channelId == client.config.channels.createChannel) {
