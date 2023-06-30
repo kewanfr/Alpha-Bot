@@ -1,4 +1,4 @@
-const { BaseInteraction, InteractionType, ModalBuilder, ModalSubmitFields, TextInputBuilder, TextInputStyle, ActionRowBuilder, StringSelectMenuBuilder, ButtonStyle, ButtonBuilder } = require("discord.js");
+const { BaseInteraction, InteractionType, ModalBuilder, ModalSubmitFields, TextInputBuilder, TextInputStyle, ActionRowBuilder, StringSelectMenuBuilder, ButtonStyle, ButtonBuilder, EmbedBuilder } = require("discord.js");
 
 module.exports = {
   name: "interactionCreate",
@@ -20,7 +20,7 @@ module.exports = {
     if(!maintenance) {
       maintenance = await Infos.create({
         name: "maintenance",
-        value: false
+        value: "0"
       });
     }
 
@@ -28,9 +28,17 @@ module.exports = {
     if (interaction.isChatInputCommand()) {
       const command = client.commands.get(interaction.commandName);
       if (!command) return;
-      if(maintenance.value && command.data.name != "maintenance"){
+
+      if(maintenance.value == "1" && command.data.name != "maintenance"){
+        
+        let embed = new EmbedBuilder()
+          .setTitle(`${client.config.emojis.bank} Maintenance en cours !`)
+          .setDescription(`${client.config.emojis.non} Le bot est actuellement en maintenance !`)
+          .setColor("Red")
+          .setTimestamp();
+          
         return interaction.reply({
-          content: "❌ La banque est actuellement en maintenance !",
+          embeds: [embed],
           ephemeral: true
         });
       }

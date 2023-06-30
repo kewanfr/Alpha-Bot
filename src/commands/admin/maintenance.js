@@ -4,6 +4,7 @@ const {
   ButtonBuilder,
   ButtonStyle,
   PermissionsBitField,
+  ActivityType,
 } = require("discord.js");
 
 module.exports = {
@@ -23,22 +24,22 @@ module.exports = {
     const emojis = client.config.emojis;
     const Infos = await getModel("Infos");
 
-    let infos = await Infos.findOne({
+    let maintenance = await Infos.findOne({
       where: {
         name: "maintenance"
       }
     });
 
-    if(!infos){
-      infos = await Infos.create({
+    if(!maintenance){
+      maintenance = await Infos.create({
         name: "maintenance",
-        value: false
+        value: "0"
       });
     }
 
-    if (infos.value) {
+    if (maintenance.value == "1") {
       await Infos.update({
-        value: false
+        value: "0"
       }, {
         where: {
           name: "maintenance"
@@ -54,9 +55,18 @@ module.exports = {
         embeds: [embed],
         ephemeral: true
       });
+
+      client.user.setPresence({
+        status: "online",
+        activities: [{
+          name: "La kolaxx Bank",
+          type: ActivityType.Watching
+        }]
+      });
+
     } else {
       await Infos.update({
-        value: true
+        value: "1"
       }, {
         where: {
           name: "maintenance"
@@ -73,6 +83,14 @@ module.exports = {
         embeds: [embed],
         ephemeral: true
       });
+      client.user.setPresence({
+        status: "dnd",
+        activities: [{
+          name: "en maintenance",
+          type: ActivityType.Watching
+        }]
+      });
+      client.user.setStatus('dnd');
     }
   },
 };
