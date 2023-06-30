@@ -16,6 +16,8 @@ module.exports = {
       if(message.channel.type === "DM") return;
       if(message.content.startsWith(client.config.prefix)) return;
 
+      if (!await isUserBanned(interaction.user.id)) return;
+
       const Wallet = await getModel("Wallet");
 
       let userWallet = await Wallet.findOrCreate({
