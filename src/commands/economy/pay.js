@@ -78,7 +78,7 @@ module.exports = {
     if (userWallet.dataValues.money < amount) {
       
       const embed = new EmbedBuilder()
-        .setTitle(`${emojis.error} Kolaxx Bank`)
+        .setTitle(`${emojis.bank} Kolaxx Bank`)
         .setDescription(
           `${emojis.non} Tu n'as pas assez d'argent sur ton porte monnaie !`
         )

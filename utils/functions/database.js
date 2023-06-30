@@ -72,7 +72,7 @@ module.exports = async (client) => {
     return getDiscordTimestamp(reglement.updatedAt);
   }
 
-  isUserBan = async(user_id) => {
+  isUserBanned = async(user_id) => {
     let ban = await Bans.findOne({
       where: {
         user_id: user_id,
