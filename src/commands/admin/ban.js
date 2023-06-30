@@ -30,6 +30,25 @@ module.exports = {
     const Bans = await getModel("Bans");
 
     let user = interaction.options.getUser("user");
+
+    let banned = await Bans.findOne({
+      where: {
+        user_id: user.id
+      }
+    });
+
+    if (banned) {
+      let embed = new EmbedBuilder()
+        .setTitle(`${emojis.bank} Utilisateur déjà banni !`)
+        .setDescription(`${emojis.non} L'utilisateur \`${user.username}\` est déjà banni de la banque !`)
+        .setColor("Red")
+        .setTimestamp();
+
+      interaction.reply({
+        embeds: [embed],
+        ephemeral: true
+      });
+    }
     
     await Bans.create({
       user_id: user.id,
