@@ -52,7 +52,7 @@ module.exports = {
       return new EmbedBuilder()
         .setTitle(`${emojis.bank} Kolaxx Bank`)
         .setDescription(
-          `${emojis.arrow} **Solde de ton porte monnaie:** **${userWallet[0].dataValues.money}** ${emojis.kcoins} **Koins**\n\n` +
+          `${emojis.arrow} **Solde de ton porte monnaie:** **${userWallet[0].dataValues.money}** ${emojis.koins} **Koins**\n\n` +
             `${emojis.arrow} Utilise ${await getSlashCommandMention(
               "bank"
             )} pour voir le solde de ton compte bancaire !\n` +
@@ -63,7 +63,7 @@ module.exports = {
               "retrait"
             )} pour retirer de l'argent de ton compte bancaire !\n` +
             `${emojis.arrow} Utilise ${await getSlashCommandMention(
-              "transfer"
+              "pay"
             )} pour transférer de l'argent à un autre utilisateur !\n`
         )
         .setTimestamp()

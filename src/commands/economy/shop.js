@@ -51,8 +51,8 @@ module.exports = {
 
     let shopEmbed = new EmbedBuilder()
       .setTitle(`${emojis.bank} Boutique`)
-      .setDescription(`Ici, tu peux acheter des items avec tes ${emojis.kcoins} **Koins** !\n\n` +
-        `Tu disposes actuellement de **${userWallet.dataValues.money}** ${emojis.kcoins} **Koins** sur ton porte monnaie !`
+      .setDescription(`Ici, tu peux acheter des items avec tes ${emojis.koins} **Koins** !\n\n` +
+        `Tu disposes actuellement de **${userWallet.dataValues.money}** ${emojis.koins} **Koins** sur ton porte monnaie !`
       )
       .setTimestamp()
       .setColor("Blue");

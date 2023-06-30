@@ -112,8 +112,8 @@ module.exports = {
 
     let successEmbed = new EmbedBuilder()
       .setTitle(`${emojis.bank} Kolaxx Bank`)
-      .setDescription(`${emojis.oui} Tu as retiré **${montant}** ${emojis.kcoins} **Koins** de ton compte bancaire pour les mettre dans ton porte monnaie !` +
-      `\nTu as maintenant **${userWallet.dataValues.money}** ${emojis.kcoins} **Koins** dans ton porte monnaie et **${dbUser.bank}** ${emojis.kcoins} **Koins** sur ton compte bancaire !`)
+      .setDescription(`${emojis.oui} Tu as retiré **${montant}** ${emojis.koins} **Koins** de ton compte bancaire pour les mettre dans ton porte monnaie !` +
+      `\nTu as maintenant **${userWallet.dataValues.money}** ${emojis.koins} **Koins** dans ton porte monnaie et **${dbUser.bank}** ${emojis.koins} **Koins** sur ton compte bancaire !`)
       .setTimestamp()
       .setColor("Green");
     return interaction.reply({

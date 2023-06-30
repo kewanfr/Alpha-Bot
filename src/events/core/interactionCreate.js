@@ -44,7 +44,7 @@ module.exports = {
       }
       
       client.log.exec(
-        `${command.data.name} exécutée par ${interaction.user.tag} sur ${
+        `${command.data.name} exécutée par ${interaction.user.username} sur ${
           interaction.guild ? interaction.guild.name : "DM"
         }`,
         "CMD"
@@ -65,7 +65,7 @@ module.exports = {
       if (!contextMenu) return;
 
       client.log.exec(
-        `${contextMenu.data.name} exécutée par ${interaction.user.tag} sur ${
+        `${contextMenu.data.name} exécutée par ${interaction.user.username} sur ${
           interaction.guild ? interaction.guild.name : "DM"
         }`,
         "CONTEXT"
@@ -91,7 +91,7 @@ module.exports = {
       if (!component) return;
 
       client.log.exec(
-        `${component.name} exécuté par ${interaction.user.tag} sur ${
+        `${component.name} exécuté par ${interaction.user.username} sur ${
           interaction.guild ? interaction.guild.name : "DM"
         }`,
         "COMPONENT"

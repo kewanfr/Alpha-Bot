@@ -56,8 +56,8 @@ module.exports = {
             .setTitle(`${emojis.bank} Achat`)
             .setDescription(`${userMention(interaction.user.id)} ${emojis.non} Tu n'as pas assez d'argent dans ton porte monnaie pour acheter cet item !` +
               `\n\nItem : **${item.name}**\n**Description :** ${item.description}` +
-              `\nPrix de l'item : **${item.price}** ${emojis.kcoins} **Koins**` +
-              `\n\nTon argent : **${userWallet.dataValues.money}** ${emojis.kcoins} **Koins**`
+              `\nPrix de l'item : **${item.price}** ${emojis.koins} **Koins**` +
+              `\n\nTon argent : **${userWallet.dataValues.money}** ${emojis.koins} **Koins**`
             )
             .setTimestamp()
             .setColor("Red");

@@ -16,7 +16,7 @@ module.exports = {
       if (newMember.member.user.bot) return;
       if(oldMember.channelId == newMember.channelId) return;
       if (newMember.channelId == client.config.channels.createChannel) {
-        await newMember.guild.channels.create({
+        let chann = await newMember.guild.channels.create({
           name: newMember.member.user.username,
           type: ChannelType.GuildVoice,
           parent: client.config.channels.categoryCreateChannel,
@@ -31,6 +31,18 @@ module.exports = {
             },
           ],
         });
+        await newMember.setChannel(chann);
+        // chann.send({
+        //   embeds: [
+        //     new EmbedBuilder()
+        //       .setTitle("Salon vocal personnel")
+        //       .setDescription(
+
+        // })
+      }
+
+      if(oldMember.channel?.name == oldMember.member.user.username && oldMember.channel.members.size == 0) {
+        await oldMember.channel.delete();
       }
     });
       

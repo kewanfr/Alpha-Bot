@@ -101,7 +101,7 @@ module.exports = {
     const embed = new EmbedBuilder()
       .setTitle(`${emojis.bank} Kolaxx Bank`)
       .setDescription(
-        `${emojis.oui} Tu as transféré **${amount}** ${emojis.kcoins} **Koins** à **${user.username}** !`
+        `${emojis.oui} Tu as transféré **${amount}** ${emojis.koins} **Koins** à **${user.username}** !`
       )
       .setColor("Green");
 

@@ -23,7 +23,7 @@ var config = {
     decline: "<:Warning:1124301508482191411>",
     warning: "<:Warning:1124301508482191411>",
     key: "<:Key:1124300754501505065>",
-    kcoins: "<:Koins:1124303383264776242>",
+    koins: "<:Koins:1124303383264776242>",
     top: "<:Top:1124303380676882433>",
     text: "<:Text:1124302109437870192>",
     oui: "<:Oui:1124325393550278769>",
@@ -68,11 +68,10 @@ var config = {
 
 let reglement = `${config.emojis.arrow} La triche est **interdite**\n` +
 `${config.emojis.arrow} Il est interdit de faire des **paris**\n` +
-`${config.emojis.arrow} Il est interdit d'utiliser un **double compte** pour obtenir des ${config.emojis.kcoins} **Koins**\n` +
+`${config.emojis.arrow} Il est interdit d'utiliser un **double compte** pour obtenir des ${config.emojis.koins} **Koins**\n` +
 `${config.emojis.arrow} Vous ne pouvez pas **supprimer votre compte** ni **changer de mot de passe**\n` +
 `${config.emojis.arrow} Tout manquement à une de ces règles serra passible d'un **banissement**\n` +
-`${config.emojis.arrow} En cas de problème, contactez un __membre du staff__` +
-`Kewan est trop bg`;
+`${config.emojis.arrow} En cas de problème, contactez un __membre du staff__`;
 
 config.reglement = reglement;
 

@@ -1,15 +1,12 @@
 const {
   EmbedBuilder,
-  ActionRowBuilder,
-  ButtonBuilder,
-  ButtonStyle,
   PermissionsBitField,
 } = require("discord.js");
 
 module.exports = {
   data: {
-    name: "set-coins",
-    description: "Définir le solde d'un porte monnaie",
+    name: "set-bank",
+    description: "Définir le solde d'un compte en banque",
     options: [
       {
         name: "user",
@@ -35,27 +32,27 @@ module.exports = {
    */
   run: async (client, interaction) => {
     const emojis = client.config.emojis;
-    const Wallet = await getModel("Wallet");
+    const User = await getModel("User");
 
     let user = interaction.options.getUser("user");
     let money = interaction.options.getInteger("money");
 
-    let userWallet = await Wallet.update({
-      money: money
+    let dbUser = await User.update({
+      bank: money
     }, {
       where: {
         user_id: user.id
       }
     });
 
-    userWallet = userWallet[0];
+    dbUser = dbUser[0];
 
     let embed = new EmbedBuilder()
       .setTitle(`${emojis.bank} Solde défini !`)
-      .setDescription(`${emojis.oui} Le solde du porte monnaie de \`${user.username}\` a été défini à **${money}** ${emojis.kcoins} !`)
+      .setDescription(`${emojis.oui} Le solde du compte en banque de \`${user.username}\` a été défini à **${money}** ${emojis.koins} !`)
       .setColor("Green")
       .setTimestamp();
-
+    
     interaction.reply({
       embeds: [embed],
       ephemeral: true

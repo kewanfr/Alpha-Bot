@@ -93,8 +93,8 @@ module.exports = {
     let WalletEmbed = new EmbedBuilder()
       .setDescription(
         `${emojis.arrow} Tu as récupéré ton argent quotidien !\n` +
-        `${emojis.arrow} Tu as reçu **${moneyToGive}** ${emojis.kcoins} **Koins** !\n` +
-        `Tu as maintenant **${userWallet[0].dataValues.money + moneyToGive}** ${emojis.kcoins} **Koins** !`
+        `${emojis.arrow} Tu as reçu **${moneyToGive}** ${emojis.koins} **Koins** !\n` +
+        `Tu as maintenant **${userWallet[0].dataValues.money + moneyToGive}** ${emojis.koins} **Koins** !`
       )
       .setTimestamp()
       .setColor("Blue");

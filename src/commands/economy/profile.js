@@ -67,9 +67,9 @@ module.exports = {
 
     let embed = new EmbedBuilder()
       .setTitle(`${emojis.bank} Profil de ${user.username}`)
-      .setDescription(`${emojis.oui} L'utilisateur \`${user.username}\` a **${wallet.money}** ${emojis.kcoins} **Koins** dans son porte monnaie !\n`
-      + `Il a **${dbUser.bank}** ${emojis.kcoins} **Koins** sur son compte !\n` +
-      `Il a **${wallet.money + dbUser.bank}** ${emojis.kcoins} **Koins** en tout !` +
+      .setDescription(`${emojis.oui} L'utilisateur \`${user.username}\` a **${wallet.money}** ${emojis.koins} **Koins** dans son porte monnaie !\n`
+      + `Il a **${dbUser.bank}** ${emojis.koins} **Koins** sur son compte !\n` +
+      `Il a **${wallet.money + dbUser.bank}** ${emojis.koins} **Koins** en tout !` +
       `\n\n__Description__: ${dbUser.description ?? "L'utilisateur n'a pas de description"}` 
       )
       .setColor("Green")
