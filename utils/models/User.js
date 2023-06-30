@@ -14,6 +14,22 @@ module.exports = (client) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      accepted: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+      },
+      connected: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+      },
+      connected_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
     },
     {
       // Les options de votre modèle
