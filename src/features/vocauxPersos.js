@@ -343,7 +343,7 @@ module.exports = {
               ephemeral: true,
             });
 
-            let filter = (m) => m.author.id == interaction.user.id && !m.user.bot;
+            let filter = (m) => m.author.id == interaction.user.id && !m.author.bot;
             let collector = interaction.channel.createMessageCollector({
               filter,
               time: 60000,
@@ -389,7 +389,7 @@ module.exports = {
               ephemeral: true,
             });
 
-            let filterSetLimit = (m) => m.author.id == interaction.user.id && !m.user.bot;
+            let filterSetLimit = (m) => m.author.id == interaction.user.id && !m.author.bot;
             let collectorSetLimit = interaction.channel.createMessageCollector({
               filterSetLimit,
               time: 60000,
