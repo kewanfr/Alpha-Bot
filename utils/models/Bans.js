@@ -8,6 +8,7 @@ module.exports = (client) => {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+        unique: true
       },
       user_id: DataTypes.STRING
     },

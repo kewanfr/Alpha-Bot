@@ -40,7 +40,7 @@ module.exports = {
 
     if (member && !member.bannable) {
       let embed = new EmbedBuilder()
-        .setTitle(`Utilisateur ne peut être banni !`)
+        .setTitle(`L'utilisateur ne peut être banni !`)
         .setDescription(`${emojis.non} L'utilisateur \`${user.username}\` n'est pas bannable !`)
         .setColor("Red")
         .setTimestamp();
@@ -52,7 +52,7 @@ module.exports = {
 
     if (member && member.roles.highest.position >= interaction.member.roles.highest.position) {
       let embed = new EmbedBuilder()
-        .setTitle(`Utilisateur ne peut être banni !`)
+        .setTitle(`L'utilisateur ne peut être banni !`)
         .setDescription(`${emojis.non} L'utilisateur \`${user.username}\` a un rôle supérieur au votre !`)
         .setColor("Red")
         .setTimestamp();

@@ -15,6 +15,8 @@ module.exports = async (client) => {
         return Infos;
       case "Bans":
         return Bans;
+      case "Vocaux":
+        return Vocaux;
       default:
         return false;
     }
@@ -92,6 +94,7 @@ module.exports = async (client) => {
   const Infos = require("../models/Infos")(client);
   const Wallet = require("../models/Wallet")(client);
   const Bans = require("../models/Bans")(client);
+  const Vocaux = require("../models/Vocaux")(client);
 
   await client.sqlite.sync({ alter: true });
   await verifUpdateReglement();

@@ -1,4 +1,4 @@
-const { Events, Client, Message, ActionRowBuilder, ButtonStyle, ButtonBuilder, EmbedBuilder } = require("discord.js");
+const { Events, Client, Message } = require("discord.js");
 const clean = async (text) => {
   // If our input is a promise, await it before continuing
   if (text && text.constructor.name == "Promise") text = await text;
@@ -47,8 +47,15 @@ module.exports = {
         const evaled = eval(args.join(" "));
         const cleaned = await clean(evaled);
         console._log(cleaned);
+        let content = `\`\`\`js\n${cleaned}\n\`\`\``;
+        if(content.length > 2000) {
+          content = content.slice(0, 2000);
+          
+          message.channel.send({ content: content });
+          return;
+        }
         // Reply in the channel with our result
-        message.channel.send({ content: `\`\`\`js\n${cleaned}\n\`\`\`` });
+        message.channel.send({ content: content });
       } catch (error) {
         // If an error is caught, then it is logged
         console.log(error);
