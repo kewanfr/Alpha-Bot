@@ -486,7 +486,6 @@ module.exports = {
             components: [
               new ActionRowBuilder().addComponents(
                 new ButtonBuilder()
-                  .setCustomId("vc-channel-join")
                   .setLabel("Rejoindre")
                   .setStyle(ButtonStyle.Link)
                   .setURL(`https://discord.com/channels/${interaction.guild.id}/${voiceChannel.id}`)
@@ -496,6 +495,7 @@ module.exports = {
           usersIds.push(user);
           await voiceChannel.permissionOverwrites.edit(user, {
             Connect: true,
+            ViewChannel: true,
           });
         }
 
